@@ -12,15 +12,15 @@ const blogsRouter = require('./controllers/blogs')
 const middleware = require('./utils/middleware')
 
 const connect = async () => {
-  console.log('connecting to', config.MONGODB_URI)
-  const mongoUrl = config.MONGODB_URI;
+	console.log('connecting to', config.MONGODB_URI)
+	const mongoUrl = config.MONGODB_URI
   
-  try {
-    await mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
-    console.log('connected to MongoDB')
-  } catch (error) {
-    console.log('error connection to MongoDB:', error.message)
-  }
+	try {
+		await mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+		console.log('connected to MongoDB')
+	} catch (error) {
+		console.log('error connection to MongoDB:', error.message)
+	}
 }
 connect()
 
@@ -34,4 +34,4 @@ app.use('/api/blogs', blogsRouter)
 
 app.use(middleware.errorHandler)
 
-module.exports = app;
+module.exports = app

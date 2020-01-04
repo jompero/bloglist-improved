@@ -1,40 +1,43 @@
 {
-  "name": "blog-list",
-  "version": "0.0.1",
-  "description": "List of Blogs",
-  "main": "index.js",
+  "name": "bloglist-frontend",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.15",
-    "mongoose": "^5.8.3",
-    "mongoose-unique-validator": "^2.0.3",
-    "node": "^13.5.0"
-  },
-  "devDependencies": {
-    "jest": "^24.9.0",
-    "nodemon": "^2.0.2",
-    "supertest": "^4.0.2"
+    "axios": "^0.19.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "3.0.1"
   },
   "scripts": {
-    "start": "NODE_ENV=production node index.js",
-    "watch": "NODE_ENV=development nodemon index.js",
-    "test": "NODE_ENV=test jest --verbose --runInBand"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "eslint": "eslint .",
+    "cypress:open": "cypress open"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jompero/blog-list.git"
+  "eslintConfig": {
+    "extends": "react-app"
   },
-  "author": "Dani Jompero",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/jompero/blog-list/issues"
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
-  "homepage": "https://github.com/jompero/blog-list#readme",
-  "jest": {
-    "testEnvironment": "node"
+  "proxy": "http://localhost:3003",
+  "devDependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.4.0",
+    "cypress": "^3.8.1",
+    "eslint-plugin-jest": "^23.2.0",
+    "eslint-plugin-react-hooks": "^2.3.0"
   }
 }
