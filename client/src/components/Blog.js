@@ -1,13 +1,12 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react'
+import React from 'react'
+import { connect } from 'react-redux'
+import { likeBlog, removeBlog } from '../reducers/blogsReducer'
+import { setNotification } from '../reducers/notificationReducer'
 import Toggleable from './Toggleable'
 import Submit from './Submit'
-import blogService from '../services/blogs'
 
-const Blog = (props) => {
-	const { logger } = props
-	const [blog, setBlog] = useState(props.blog)
-	// console.log(blog)
+const Blog = ({ user, blog, setNotification, likeBlog, removeBlog }) => {
 
 	const blogFormRef = React.createRef()
 
@@ -17,30 +16,26 @@ const Blog = (props) => {
 
 	const onLike = async () => {
 		try {
-			const likedBlog = await blogService.like(blog)
-			// console.log(likedBlog)
-			setBlog(likedBlog)
-			props.handleLike(likedBlog)
-			logger('success', `Liked ${blog.title}! :)`)
+			await likeBlog(blog)
+			setNotification('success', `Liked ${blog.title}! :)`)
 		} catch(exception) {
 			// console.log(exception)
-			logger('danger', 'Error occured while liking... :(')
+			setNotification('danger', 'Error occured while liking... :(')
 		}
 	}
 
 	const onRemove = async () => {
 		try {
-			const removedBlog = await blogService.remove(blog)
-			props.handleRemove(blog)
-			logger('success', `Blog ${blog.title} removed!`)
+			removeBlog(blog.id)
+			setNotification('success', `Blog ${blog.title} removed!`)
 		} catch(exception) {
-			// console.log(exception)
-			logger('danger', 'Error occured while removing...')
+			console.log(exception)
+			setNotification('danger', 'Error occured while removing...')
 		}
 	}
 
 	const removeButton = () => {
-		if (!props.user || blog.user.username !== props.user.username) return ''
+		if (!user || blog.user.username !== user.username) return ''
 		return <Submit text='Remove' handleClick={onRemove}/>
 	}
 
@@ -74,4 +69,10 @@ const Blog = (props) => {
 	)
 }
 
-export default Blog
+const mapDispatchToProps = {
+	likeBlog,
+	removeBlog,
+	setNotification
+}
+
+export default connect(null, mapDispatchToProps)(Blog)

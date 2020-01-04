@@ -65,6 +65,7 @@ router.post('/', authenticate, async (request, response, next) => {
 
 	try {
 		const savedBlog = await blog.save()
+		await savedBlog.populate('user', { username: 1, name: 1 }).execPopulate()
 		console.log('blog saved', savedBlog)
 		const user = request.user
 		user.blogs = user.blogs ? user.blogs.concat(savedBlog._id) : [ savedBlog._id ]
@@ -96,6 +97,7 @@ router.delete('/:id', authenticate, async (request, response, next) => {
 router.put('/:id', async (request, response, next) => {
 	try {
 		const blog = await Blog.findByIdAndUpdate(request.params.id, request.body, { new: true }).populate('user', { username: 1, name: 1 })
+		console.log('modified', blog)
 		response.json(blog)
 	} catch (error) {
 		next(error)

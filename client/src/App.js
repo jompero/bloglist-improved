@@ -1,15 +1,18 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react'
+import {
+	BrowserRouter as Router,
+	Route, Link, Redirect, withRouter
+} from 'react-router-dom'
 import './App.css'
 import blogsService from './services/blogs'
 import Login from './components/Login'
-import SnackBar from './components/Snackbar'
+import Notification from './components/Notification'
 import Blogs from './components/Blogs'
 import Submit from './components/Submit'
 
 function App() {
 	const [user, setUser] = useState(null)
-	const [message, setMessage] = useState({})
 
 	useEffect(() => {
 		const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
@@ -24,26 +27,18 @@ function App() {
 		setUser(user)
 	}
 
-	const log = (type, label) => {
-		setMessage({ type, label })
-		setTimeout(() => {
-			setMessage({})
-		}, 5000)
-	}
-
 	const logout = () => {
 		window.localStorage.clear()
 		setUser(null)
 	}
 
-	const loginForm = () => (<Login onUserLoggedIn={handleUser} logger={log}/>)
+	const loginForm = () => (<Login onUserLoggedIn={handleUser} />)
 	const loggedIn = () => (
 		<div>
 			<p>Logged in as {user.username}<Submit text="Log out" handleClick={logout}/></p>
-			<Blogs user={user} logger={log}/>
+			<Blogs user={user} />
 		</div>
 	)
-	const snackBar = () => (<SnackBar type={message.type} label={message.label} />)
 
 	return (
 		<div className="App">
@@ -51,7 +46,7 @@ function App() {
 			{user === null
 				? loginForm()
 				: loggedIn()}
-			{message.label && snackBar()}
+			<Notification />
 		</div>
 	)
 }

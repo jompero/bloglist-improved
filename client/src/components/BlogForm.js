@@ -1,10 +1,12 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react'
+import React from 'react'
+import { connect } from 'react-redux'
+import { createBlog } from '../reducers/blogsReducer'
+import { setNotification } from '../reducers/notificationReducer'
 import Submit from './Submit'
-import blogsService from '../services/blogs'
 import { useField } from '../hooks'
 
-const BlogForm = ({ logger, onBlogCreated }) => {
+const BlogForm = ({ setNotification, onBlogCreated, createBlog }) => {
 	const { reset: resetTitle, ...title } = useField('text')
 	const { reset: resetAuthor, ...author } = useField('text')
 	const { reset: resetUrl, ...url } = useField('text')
@@ -12,16 +14,16 @@ const BlogForm = ({ logger, onBlogCreated }) => {
 	const onSubmitHandler = async (event) => {
 		event.preventDefault()
 		try {
-			const blog = await blogsService.create({
-				title: title.value, author: author.value, url: url.value,
-			})
+			createBlog(title.value, author.value, url.value)
+			setNotification('success', `Blog ${title.value} posted succesfully.`)
+
 			resetTitle()
 			resetAuthor()
 			resetUrl()
-			logger('success', `Blog ${blog.title} posted succesfully.`)
-			onBlogCreated && onBlogCreated(blog)
+
+			// onBlogCreated && onBlogCreated(blog)
 		} catch (exception) {
-			logger('danger', 'An error occured during blog posting. Please try again.')
+			setNotification('danger', 'An error occured during blog posting. Please try again.')
 		}
 	}
 
@@ -52,4 +54,9 @@ const BlogForm = ({ logger, onBlogCreated }) => {
 	)
 }
 
-export default BlogForm
+const mapDispatchToProps = {
+	createBlog,
+	setNotification
+}
+
+export default connect(null, mapDispatchToProps)(BlogForm)

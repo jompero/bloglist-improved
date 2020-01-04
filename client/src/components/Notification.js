@@ -1,9 +1,11 @@
 /* eslint-disable no-unused-vars */
 import React from 'react'
+import { connect } from 'react-redux'
 
-const Snackbar = (props) => {
-	const { label } = props
-	const { type } = props
+const Notification = (props) => {
+	if (!props.notification) return null
+
+	const { type, message } = props.notification
 
 	const containerColor = () => {
 		switch(type) {
@@ -31,12 +33,21 @@ const Snackbar = (props) => {
 		}
 	}
 
-	console.log(type, 'message', label)
+	console.log(type, 'message', message)
 	return (
 		<div style={styles.container}>
-			<div style={styles.label}>{label}</div>
+			<div style={styles.label}>{message}</div>
 		</div>
 	)
 }
 
-export default Snackbar
+
+const mapStateToProps = (state) => {
+	return {
+		notification: state.notification
+	}
+}
+
+export default connect(
+	mapStateToProps
+)(Notification)
