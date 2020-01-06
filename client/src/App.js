@@ -12,6 +12,7 @@ import Login from './components/Login'
 import Notification from './components/Notification'
 import Blogs from './components/Blogs'
 import Users from './components/Users'
+import Container from './components/styled/Container'
 
 const App = ({ user, initializeUser }) => {
 	useEffect(() => {
@@ -21,8 +22,11 @@ const App = ({ user, initializeUser }) => {
 	const app = () => (
 		<div>
 			<Menu />
+			<Route exact path='/' render={() => <Blogs />} />
 			<Route exact path='/blogs' render={() => <Blogs />} />
+			<Route exact path='/blogs/:id' render={() => null} />
 			<Route exact path='/users' render={() => <Users />} />
+			<Route exact path='/users/:id' render={() => null} />
 		</div>
 	)
 

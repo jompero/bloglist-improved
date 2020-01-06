@@ -22,13 +22,14 @@ const Menu = ({ user, logoutUser }) => {
 	}
 
 	const isActive = (match, matcher) => {
+		if (!match.params.path) return false
 		return match.params.path.toLowerCase() === matcher
 	}
 
 	const navBar = (match) => {
 		return (
 			<Nav.Bar>
-				<Nav.Item>Bloglist</Nav.Item>
+				<Nav.Link to='/'>Bloglist</Nav.Link>
 				<Nav.Link active={isActive(match, 'blogs')} to='/blogs'>Blogs</Nav.Link>
 				<Nav.Link active={isActive(match, 'users')} to='/users'>Users</Nav.Link>
 				{ userInfo() }
@@ -37,6 +38,7 @@ const Menu = ({ user, logoutUser }) => {
 	}
 	return (
 		<nav>
+			<Route exact path='/' render={({ match }) => navBar(match)} />
 			<Route path='/:path' render={({ match }) => navBar(match)} />
 		</nav>
 	)
