@@ -3,35 +3,16 @@ import React from 'react'
 import { useField } from '../hooks'
 import { connect } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
-import PropTypes from 'prop-types'
+import { loginUser } from '../reducers/userReducer'
 import Submit from './Submit'
-import loginService from '../services/login'
-import blogService from '../services/blogs'
 
-const Login = ({ onUserLoggedIn, setNotification }) => {
+const Login = ({ login, setNotification }) => {
 	const { reset: resetUsername, ...username } = useField('text')
 	const { reset: resetPassword, ...password } = useField('password')
 
-	const handleSubmit = async (event) => {
+	const handleSubmit = (event) => {
 		event.preventDefault()
-		try {
-			const user = await loginService.login({
-				username: username.value, password: password.value,
-			})
-
-			window.localStorage.setItem(
-				'loggedBloglistUser', JSON.stringify(user)
-			)
-
-			blogService.setToken(user.token)
-			onUserLoggedIn(user)
-			resetUsername()
-			resetPassword()
-			setNotification('success', `Logged in as ${user.username}`)
-		} catch (exception) {
-			console.log(exception)
-			setNotification('danger', 'Invalid username or password')
-		}
+		login(username.value, password.value)
 	}
 
 	const styles = {
@@ -64,7 +45,8 @@ const Login = ({ onUserLoggedIn, setNotification }) => {
 }
 
 const mapDispatchToProps = {
-	setNotification
+	setNotification,
+	login: loginUser
 }
 
 export default connect(null, mapDispatchToProps)(Login)

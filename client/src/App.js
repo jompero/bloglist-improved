@@ -1,54 +1,49 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import {
 	BrowserRouter as Router,
 	Route, Link, Redirect, withRouter
 } from 'react-router-dom'
 import './App.css'
-import blogsService from './services/blogs'
+import { connect } from 'react-redux'
+import { initializeUser } from './reducers/userReducer'
+import Menu from './components/Menu'
 import Login from './components/Login'
 import Notification from './components/Notification'
 import Blogs from './components/Blogs'
-import Submit from './components/Submit'
+import Users from './components/Users'
 
-function App() {
-	const [user, setUser] = useState(null)
-
+const App = ({ user, initializeUser }) => {
 	useEffect(() => {
-		const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
-		if (loggedUserJSON) {
-			const user = JSON.parse(loggedUserJSON)
-			setUser(user)
-			blogsService.setToken(user.token)
-		}
-	}, [])
+		initializeUser()
+	}, [initializeUser])
 
-	const handleUser = (user) => {
-		setUser(user)
-	}
-
-	const logout = () => {
-		window.localStorage.clear()
-		setUser(null)
-	}
-
-	const loginForm = () => (<Login onUserLoggedIn={handleUser} />)
-	const loggedIn = () => (
+	const app = () => (
 		<div>
-			<p>Logged in as {user.username}<Submit text="Log out" handleClick={logout}/></p>
-			<Blogs user={user} />
+			<Menu />
+			<Route exact path='/blogs' render={() => <Blogs />} />
+			<Route exact path='/users' render={() => <Users />} />
 		</div>
 	)
 
 	return (
-		<div className="App">
-			<h1>Bloglist</h1>
-			{user === null
-				? loginForm()
-				: loggedIn()}
+		<Router>
 			<Notification />
-		</div>
+			{user && app()}
+			{!user && <Login />}
+		</Router>
 	)
 }
 
-export default App
+const mapStateToProps = (state) => {
+	console.log(state)
+	return {
+		user: state.user
+	}
+}
+
+const mapDispatchToProps = {
+	initializeUser
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)

@@ -27,7 +27,7 @@ const Blogs = ({ user, visibleBlogs, initializeBlogs }) => {
 		if (!user) return null
 		return (
 			<Toggleable showLabel="Post new blog" hideLabel="Cancel">
-				<BlogForm user={user} />
+				<BlogForm />
 			</Toggleable>
 		)
 	}
@@ -46,10 +46,10 @@ const blogsToShow = ({ blogs }) => {
 }
 
 const mapStateToProps = (state) => {
-	console.log(state)
 	return {
 		visibleBlogs: blogsToShow(state),
-		filter: state.filter
+		filter: state.filter,
+		user: state.user
 	}
 }
 

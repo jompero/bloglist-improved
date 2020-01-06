@@ -69,10 +69,14 @@ const Blog = ({ user, blog, setNotification, likeBlog, removeBlog }) => {
 	)
 }
 
+const mapStateToProps = (state) => {
+	return { user: state.user }
+}
+
 const mapDispatchToProps = {
 	likeBlog,
 	removeBlog,
 	setNotification
 }
 
-export default connect(null, mapDispatchToProps)(Blog)
+export default connect(mapStateToProps, mapDispatchToProps)(Blog)
