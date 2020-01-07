@@ -14,7 +14,7 @@ const Submit = ({ text='Submit', handleClick }) => {
 		cursor: 'pointer'
 	}
 
-	return (<input onClick={onClickHandler} type='submit' value={text} style={style}></input>)
+	return (<input id={text} onClick={onClickHandler} type='submit' value={text} style={style}></input>)
 }
 
 export default Submit

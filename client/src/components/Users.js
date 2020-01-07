@@ -14,7 +14,9 @@ const Users = ({ users, initializeUsers }) => {
 	const userList = () => {
 		return users.map(user => {
 			return (
-				<Nav.Link key={user.id} to={`/users/${user.id}`}>{user.username}, {user.name} <Nav.Item right>{user.blogs.length} <i>blogs</i></Nav.Item></Nav.Link>
+				<Nav.Link key={user.id} to={`/users/${user.id}`}>{user.username}, {user.name}
+					<Nav.Item right>{user.blogs.length} <i>blogs</i></Nav.Item>
+				</Nav.Link>
 			)
 		})
 	}
@@ -27,7 +29,7 @@ const Users = ({ users, initializeUsers }) => {
 			</Nav.Column>
 		</div>
 	)
-} 
+}
 
 const mapStateToProps = (state) => {
 	return {

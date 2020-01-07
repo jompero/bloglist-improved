@@ -37,10 +37,10 @@ const BlogForm = ({ createBlog }) => {
 
 	return (
 		<form onSubmit={onSubmitHandler} style={styles.form}>
-			<label>Title</label><input {...title} style={styles.input} />
-			<label>Author</label><input {...author} style={styles.input} />
-			<label>URL</label><input {...url} style={styles.input} />
-			<Submit text='Submit' />
+			<label>Title</label><input id='title' {...title} style={styles.input} />
+			<label>Author</label><input id='author' {...author} style={styles.input} />
+			<label>URL</label><input id='url' {...url} style={styles.input} />
+			<Submit />
 		</form>
 	)
 }

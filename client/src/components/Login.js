@@ -36,8 +36,8 @@ const Login = ({ login, setNotification }) => {
 		<div styles={styles.container}>
 			<h1>Login</h1>
 			<form onSubmit={handleSubmit} style={styles.form}>
-				<label>Username</label><input style={styles.input} {...username} />
-				<label>Password</label><input style={styles.input} {...password} />
+				<label>Username</label><input id='username' style={styles.input} {...username} />
+				<label>Password</label><input id='password' style={styles.input} {...password} />
 				<Submit text='Login' />
 			</form>
 		</div>
