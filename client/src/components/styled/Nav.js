@@ -11,21 +11,44 @@ const Bar = styled.ul`
     background-color: #333;
 `
 
+const Column = styled.ul`
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+`
+
 const Item = styled.li`
-    float: left;
     padding: 0.5em 1em;
     color: grey;
+    float: left;
+
+    ${props => props.right && css`
+        float: right;
+    `}
 `
 
 const Link = styled(({ active, ...props }) => <ReactRouterLink {...props} />)`
-    float: left;
-    text-align: center;
-    padding: 0.5em 1em;
+    text-align: left;
     color: white;
     text-decoration: none;
+    float: left;
 
     :hover {
         background-color: black;
+    }
+
+    ${Bar} & {
+        padding: 0.5em 1em;
+    }
+
+    ${Column} & {
+        padding-top: 1em;
+        padding-left: 1em;
+        line-height: 1.5em;
     }
 
     ${props => props.active && css`
@@ -34,8 +57,4 @@ const Link = styled(({ active, ...props }) => <ReactRouterLink {...props} />)`
     `}
 `
 
-const Text = styled.div`
-
-`
-
-export default { Bar, Item, Link, Text }
+export default { Column, Bar, Item, Link }

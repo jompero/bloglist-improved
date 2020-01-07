@@ -96,7 +96,9 @@ router.delete('/:id', authenticate, async (request, response, next) => {
 
 router.put('/:id', async (request, response, next) => {
 	try {
-		const blog = await Blog.findByIdAndUpdate(request.params.id, request.body, { new: true }).populate('user', { username: 1, name: 1 })
+		const blog = await Blog
+			.findByIdAndUpdate(request.params.id, request.body, { new: true })
+			.populate('user', { username: 1, name: 1 })
 		console.log('modified', blog)
 		response.json(blog)
 	} catch (error) {

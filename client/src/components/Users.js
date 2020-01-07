@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { initializeUsers } from '../reducers/usersReducer'
+import Nav from './styled/Nav'
 
 const Users = ({ users, initializeUsers }) => {
 	useEffect(() => {
@@ -11,25 +12,19 @@ const Users = ({ users, initializeUsers }) => {
 	if (!users) return null
 
 	const userList = () => {
-		const list = users.map(user => {
+		return users.map(user => {
 			return (
-				<tr key={user.id}><td>{user.name}</td><td>{user.blogs.length}</td></tr>
+				<Nav.Link key={user.id} to={`/users/${user.id}`}>{user.username}, {user.name} <Nav.Item right>{user.blogs.length} <i>blogs</i></Nav.Item></Nav.Link>
 			)
 		})
-		return (
-			<table>
-				<tbody>
-					<tr><th>Name:</th><th>Blogs</th></tr>
-					{list}
-				</tbody>
-			</table>
-		)
 	}
 
 	return (
 		<div>
 			<h1>Users</h1>
-			{userList()}
+			<Nav.Column>
+				{userList()}
+			</Nav.Column>
 		</div>
 	)
 } 

@@ -1,42 +1,36 @@
 /* eslint-disable no-unused-vars */
 import React from 'react'
+import { useField } from '../hooks'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { likeBlog, removeBlog } from '../reducers/blogsReducer'
-import { setNotification } from '../reducers/notificationReducer'
-import Toggleable from './Toggleable'
+import { likeBlog, removeBlog, commentBlog } from '../reducers/blogsReducer'
 import Submit from './Submit'
+import { compose } from 'redux'
 
-const Blog = ({ user, blog, setNotification, likeBlog, removeBlog }) => {
+const Blog = ({ user, blogs, id, likeBlog, removeBlog, commentBlog, history }) => {
+	const { reset: resetComment, ...comment } = useField('text')
 
-	const blogFormRef = React.createRef()
+	const blog = blogs.find(blog => blog.id === id)
+	if (!blog) return null
 
-	const toggleContent = () => {
-		blogFormRef.current.toggleContent()
-	}
-
-	const onLike = async () => {
-		try {
-			await likeBlog(blog)
-			setNotification('success', `Liked ${blog.title}! :)`)
-		} catch(exception) {
-			// console.log(exception)
-			setNotification('danger', 'Error occured while liking... :(')
-		}
+	const onLike = () => {
+		likeBlog(blog)
 	}
 
 	const onRemove = async () => {
-		try {
-			removeBlog(blog.id)
-			setNotification('success', `Blog ${blog.title} removed!`)
-		} catch(exception) {
-			console.log(exception)
-			setNotification('danger', 'Error occured while removing...')
-		}
+		removeBlog(blog.id)
+		history.push('/blogs')
 	}
 
 	const removeButton = () => {
 		if (!user || blog.user.username !== user.username) return ''
 		return <Submit text='Remove' handleClick={onRemove}/>
+	}
+
+	const postComment = (event) => {
+		event.preventDefault()
+		commentBlog(blog, comment.value)
+		resetComment()
 	}
 
 	const styles = {
@@ -54,29 +48,47 @@ const Blog = ({ user, blog, setNotification, likeBlog, removeBlog }) => {
 		}
 	}
 
+	const comments = () => {
+		if (!blog.comments) return null
+		return blog.comments.map(comment => <li key={comment}>{comment}</li>)
+	}
+
 	return (
 		<div className='blog' style={styles.container}>
-			<div onClick={toggleContent}>{blog.title}, {blog.author}</div>
-			<Toggleable ref={blogFormRef}>
-				<div>
-					<a href={blog.url}>{blog.url}</a>
-					<p>{blog.likes} likes <Submit text='Like' handleClick={onLike} /></p>
-					<i style={styles.user}>Linked by {blog.user.username}</i>
-					{removeButton()}
-				</div>
-			</Toggleable>
+			<h1>{blog.title}</h1>
+			<p>{blog.author}</p>
+			<div>
+				<a href={blog.url}>{blog.url}</a>
+				<p>{blog.likes} likes</p>
+				<i style={styles.user}>Linked by {blog.user.username}</i>
+				<div><Submit text='Like' handleClick={onLike} /> {removeButton()}</div>
+				<h4>Comments</h4>
+				<ul>
+					{comments()}
+				</ul>
+			</div>
+			<form onSubmit={postComment}>
+				<div><label>Comment: </label><input style={styles.input} {...comment} /></div>
+				<Submit />
+			</form>
 		</div>
 	)
 }
 
 const mapStateToProps = (state) => {
-	return { user: state.user }
+	return {
+		user: state.user,
+		blogs: state.blogs
+	}
 }
 
 const mapDispatchToProps = {
 	likeBlog,
 	removeBlog,
-	setNotification
+	commentBlog
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Blog)
+export default compose(
+	withRouter,
+	connect(mapStateToProps, mapDispatchToProps)
+)(Blog)

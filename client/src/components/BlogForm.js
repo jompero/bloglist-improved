@@ -2,29 +2,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { createBlog } from '../reducers/blogsReducer'
-import { setNotification } from '../reducers/notificationReducer'
 import Submit from './Submit'
 import { useField } from '../hooks'
 
-const BlogForm = ({ setNotification, onBlogCreated, createBlog }) => {
+const BlogForm = ({ createBlog }) => {
 	const { reset: resetTitle, ...title } = useField('text')
 	const { reset: resetAuthor, ...author } = useField('text')
 	const { reset: resetUrl, ...url } = useField('text')
 
-	const onSubmitHandler = async (event) => {
+	const onSubmitHandler = (event) => {
 		event.preventDefault()
-		try {
-			createBlog(title.value, author.value, url.value)
-			setNotification('success', `Blog ${title.value} posted succesfully.`)
-
-			resetTitle()
-			resetAuthor()
-			resetUrl()
-
-			// onBlogCreated && onBlogCreated(blog)
-		} catch (exception) {
-			setNotification('danger', 'An error occured during blog posting. Please try again.')
-		}
+		createBlog(title.value, author.value, url.value)
+		resetTitle()
+		resetAuthor()
+		resetUrl()
 	}
 
 	const styles = {
@@ -55,8 +46,7 @@ const BlogForm = ({ setNotification, onBlogCreated, createBlog }) => {
 }
 
 const mapDispatchToProps = {
-	createBlog,
-	setNotification
+	createBlog
 }
 
 export default connect(null, mapDispatchToProps)(BlogForm)

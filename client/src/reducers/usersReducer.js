@@ -1,6 +1,6 @@
 import usersService from '../services/users'
 
-const reducer = (state = null, action) => {
+const reducer = (state = [], action) => {
 	console.log('state now: ', state)
 	console.log('action', action)
 

@@ -34,7 +34,7 @@ const Login = ({ login, setNotification }) => {
 
 	return (
 		<div styles={styles.container}>
-			<h2>Login</h2>
+			<h1>Login</h1>
 			<form onSubmit={handleSubmit} style={styles.form}>
 				<label>Username</label><input style={styles.input} {...username} />
 				<label>Password</label><input style={styles.input} {...password} />

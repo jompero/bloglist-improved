@@ -1,32 +1,34 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
-import { initializeBlogs } from '../reducers/blogsReducer'
-import { setNotification } from '../reducers/notificationReducer'
-import Blog from './Blog'
 import BlogForm from './BlogForm'
 import Toggleable from './Toggleable'
+import Nav from './styled/Nav'
 
-const Blogs = ({ user, visibleBlogs, initializeBlogs }) => {
-
-	useEffect(() => {
-		initializeBlogs()
-	}, [initializeBlogs])
+const Blogs = ({ user, visibleBlogs }) => {
 
 	const blogsList = () => {
 		if (!visibleBlogs) return null
 
-		return visibleBlogs.map(blog => {
+		const list = visibleBlogs.map(blog => {
 			return (
-				<Blog key={blog.id} blog={blog} user={user} />
+				<Nav.Link to={`/blogs/${blog.id}`} key={blog.id}>
+					{blog.title} <Nav.Item right>{blog.author}</Nav.Item>
+				</Nav.Link>
 			)
 		})
+
+		return (
+			<Nav.Column>
+				{list}
+			</Nav.Column>
+		)
 	}
 
 	const blogForm = () => {
 		if (!user) return null
 		return (
-			<Toggleable showLabel="Post new blog" hideLabel="Cancel">
+			<Toggleable showLabel="+" hideLabel="-">
 				<BlogForm />
 			</Toggleable>
 		)
@@ -34,6 +36,7 @@ const Blogs = ({ user, visibleBlogs, initializeBlogs }) => {
 
 	return (
 		<div>
+			<h1>Blogs</h1>
 			<div>{blogForm()}</div>
 			<div>{blogsList()}</div>
 		</div>
@@ -53,9 +56,4 @@ const mapStateToProps = (state) => {
 	}
 }
 
-const mapDispatchToProps = {
-	setNotification,
-	initializeBlogs
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Blogs)
+export default connect(mapStateToProps)(Blogs)
